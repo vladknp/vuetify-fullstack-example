@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  name: "ParentApp",
+  name: "App",
   data() {
     return {
       tab: null,
