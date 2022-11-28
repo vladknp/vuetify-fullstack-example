@@ -1,56 +1,109 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-main>
-      <HelloWorld />
-    </v-main>
+    <v-card flat>
+      <v-tabs v-model="tab" align-with-title>
+        <v-tab>Клієнт</v-tab>
+        <v-tab>Додаткова інформація</v-tab>
+      </v-tabs>
+      <v-tabs-items v-model="tab">
+        <v-tab-item v-for="table in tables" :key="table.id">
+          <v-card flat>
+            <v-card-text>
+              <v-data-table :headers="table.headers" :items="table.clients">
+                <template #[`item.phone`]="props">
+                  <input v-model="props.item.phone" />
+                </template>
+              </v-data-table>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+      </v-tabs-items>
+    </v-card>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld";
-
 export default {
-  name: "App",
-
-  components: {
-    HelloWorld,
+  name: "ParentApp",
+  data() {
+    return {
+      tab: null,
+      tables: [
+        {
+          id: 0,
+          headers: [
+            {
+              text: "Ім`я",
+              sortable: false,
+              value: "name",
+            },
+            {
+              text: "Телефон",
+              sortable: false,
+              value: "phone",
+            },
+            {
+              text: "Код ІНН",
+              sortable: false,
+              value: "inn",
+            },
+          ],
+          clients: [
+            {
+              name: "Лован",
+              phone: "+380971234567",
+              inn: 1234567890,
+            },
+            {
+              name: "Рюмер",
+              phone: "+380972234567",
+              inn: 2234567890,
+            },
+          ],
+        },
+        {
+          id: 1,
+          headers: [
+            {
+              text: "Код ІНН",
+              sortable: false,
+              value: "inn",
+            },
+            {
+              text: "Місце проживання",
+              sortable: false,
+              value: "residence",
+            },
+            {
+              text: "Місце реєстрації",
+              sortable: false,
+              value: "regPlace",
+            },
+            {
+              text: "Номер паспорта",
+              sortable: false,
+              value: "numOfPassport",
+            },
+          ],
+          clients: [
+            {
+              inn: "1234567890",
+              residence: "м. Львів, вул. Миру 8",
+              regPlace: "м. Львів, вул. Миру 8",
+              numOfPassport: 123456,
+            },
+            {
+              inn: "2234567890",
+              residence: "м. Київ, вул. Дмитрівська 28, кв. 5",
+              regPlace: "м. Київ, вул. Дмитрівська 28, кв. 5",
+              numOfPassport: 223456,
+            },
+          ],
+        },
+      ],
+    };
   },
-
-  data: () => ({
-    //
-  }),
+  computed: {},
+  methods: {},
 };
 </script>
