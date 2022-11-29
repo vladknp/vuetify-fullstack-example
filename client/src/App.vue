@@ -8,7 +8,10 @@
         <v-card-text>
           <v-data-table :headers="headers" :items="clients">
             <template #[`item.phone`]="props">
-              <input v-model="props.item.phone" />
+              <input
+                :value="props.item.phone"
+                @input="enterPhone(props.index, $event)"
+              />
             </template>
           </v-data-table>
         </v-card-text>
@@ -19,7 +22,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { FIND_ALL_CLIENTS } from "@/store/constants";
+import { FIND_ALL_CLIENTS, INPUT_PHONE } from "@/store/constants";
 
 export default {
   name: "App",
@@ -88,6 +91,10 @@ export default {
       return this.tables[this.tab]?.headers || [];
     },
   },
-  methods: {},
+  methods: {
+    enterPhone(idx, event) {
+      this.$store.commit(INPUT_PHONE, { idx, value: event.target.value });
+    },
+  },
 };
 </script>
