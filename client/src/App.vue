@@ -18,6 +18,9 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import { FIND_ALL_CLIENTS } from "@/store/constants";
+
 export default {
   name: "App",
   data() {
@@ -70,33 +73,21 @@ export default {
           ],
         },
       ],
-      clients: [
-        {
-          id: 0,
-          name: "Лован",
-          phone: "+380971122334",
-          inn: 1234567890,
-          residence: "м. Львів, вул. Миру 8",
-          regPlace: "м. Львів, вул. Миру 8",
-          numOfPassport: 123456,
-        },
-        {
-          id: 1,
-          name: "Рюмер",
-          phone: "+380975566778",
-          inn: 2234567890,
-          residence: "м. Київ, вул. Дмитрівська 28, кв. 5",
-          regPlace: "м. Київ, вул. Дмитрівська 28, кв. 5",
-          numOfPassport: 223456,
-        },
-      ],
     };
   },
+  mounted() {
+    this.$store.dispatch(FIND_ALL_CLIENTS);
+  },
   computed: {
+    ...mapState({
+      clients: (state) => {
+        return state.clients;
+      },
+    }),
     headers() {
       return this.tables[this.tab]?.headers || [];
     },
-  computed: {},
+  },
   methods: {},
 };
 </script>

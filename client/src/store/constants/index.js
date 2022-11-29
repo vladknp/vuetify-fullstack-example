@@ -1,0 +1,2 @@
+export const FIND_ALL_CLIENTS = "FIND_ALL_CLIENTS";
+export const SET_CLIENTS = "SET_CLIENTS";
