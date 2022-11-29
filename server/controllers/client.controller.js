@@ -1,5 +1,6 @@
 const clients = [
   {
+    id: 0,
     name: "Лован",
     phone: "+380971234567",
     inn: 1234567890,
@@ -8,6 +9,7 @@ const clients = [
     numOfPassport: 123456,
   },
   {
+    id: 1,
     name: "Рюмер",
     phone: "+380972234567",
     inn: 2234567890,
