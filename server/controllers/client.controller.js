@@ -1,3 +1,6 @@
+const statuses = require('../utils/statuses')
+const { BadRequest, NotModified } = statuses
+
 const clients = [
   {
     id: 0,
@@ -22,6 +25,39 @@ const clients = [
 class ClientController {
   getAll(req, res, next) {
     res.json(clients)
+  }
+
+  updateById(req, res, next) {
+    const { clientId } = req.params
+    const { phone } = req.body
+
+    const clientIndex = clients.findIndex(client => client.id === Number(clientId))
+
+    if(clientIndex === -1) {
+      return new NotModified(res)
+    }
+
+    const client = clients[clientIndex]
+
+    client.phone = phone
+    res.json({ client })
+  }
+
+  validateClientId(req, res, next) {
+    const { clientId } = req.params
+    
+    if(Number.isNaN(Number(clientId))) {
+      return next(new BadRequest(`Не валідне значення ідентифікатора '/:clientId' ${clientId}`))
+    }
+    next()
+  }
+
+  validateBody(req, res, next) {
+    const { phone, ...otherKeys } = req.body
+    if(Object.keys(otherKeys).length > 0) {
+      return next(new BadRequest(`Доступні ключі ['phone']`))
+    }
+    next()
   }
 }
 
