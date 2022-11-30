@@ -6,23 +6,35 @@
       </v-tabs>
       <v-card flat>
         <v-card-text>
-          <v-data-table :headers="headers" :items="clients">
+          <v-data-table
+            :headers="headers"
+            :items="clients"
+            :loading="isLoading"
+          >
             <template #[`item.phone`]="props">
               <input
                 :value="props.item.phone"
-                @input="enterPhone(props.index, $event)"
+                :disabled="isDisabledInput(props.item.id)"
+                @input="enterPhone(props.item.id, $event)"
               />
             </template>
           </v-data-table>
         </v-card-text>
       </v-card>
+      <v-btn elevation="2" @click="UPDATE_CLIENT" :disabled="isDisabledButton"
+        >Зберігти</v-btn
+      >
     </v-card>
   </v-app>
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { FIND_ALL_CLIENTS, INPUT_PHONE } from "@/store/constants";
+import { mapActions, mapState } from "vuex";
+import {
+  FIND_ALL_CLIENTS,
+  INPUT_PHONE,
+  UPDATE_CLIENT,
+} from "@/store/constants";
 
 export default {
   name: "App",
@@ -82,9 +94,10 @@ export default {
     this.$store.dispatch(FIND_ALL_CLIENTS);
   },
   computed: {
+    ...mapState(["clients", "isLoading"]),
     ...mapState({
-      clients: (state) => {
-        return state.clients;
+      isDisabledButton(state) {
+        return state.clientId === null;
       },
     }),
     headers() {
@@ -92,8 +105,16 @@ export default {
     },
   },
   methods: {
-    enterPhone(idx, event) {
-      this.$store.commit(INPUT_PHONE, { idx, value: event.target.value });
+    ...mapActions([UPDATE_CLIENT]),
+    enterPhone(id, event) {
+      this.$store.commit(INPUT_PHONE, { id, value: event.target.value });
+    },
+    isDisabledInput(id) {
+      const state = this.$store.state;
+      if (state.clientId === null) {
+        return false;
+      }
+      return state.clientId !== id;
     },
   },
 };
